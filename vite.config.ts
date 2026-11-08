@@ -16,8 +16,8 @@ export default defineConfig({
         name: 'Stats PRKL – Hockey Shot Tracker',
         short_name: 'Stats PRKL',
         description: 'Shot tracker for junior and youth hockey games',
-        theme_color: '#0b3d91',
-        background_color: '#0f1218',
+        theme_color: '#000000',
+        background_color: '#f08015',
         display: 'standalone',
         orientation: 'any',
         icons: [

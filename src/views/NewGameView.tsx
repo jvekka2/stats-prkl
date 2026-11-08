@@ -6,6 +6,7 @@ import { useT } from '../lib/i18n';
 import { playerLabel, sortPlayers } from '../lib/roster';
 import { createGame, loadFormat, rememberFormat, snapTeam, today } from '../lib/game';
 import { placeholderPlayers } from '../lib/demo';
+import TeamBadge from '../components/TeamBadge';
 
 interface SideSetup { teamId: string; dressed: Set<string>; goalieId: string | null }
 
@@ -60,7 +61,7 @@ export default function NewGameView() {
     const goalies = players.filter(p => p.goalie && s.dressed.has(p.id));
     return (
       <div className="card" style={team ? { borderTop: `4px solid ${team.color}` } : undefined}>
-        <h2>{side === 'home' ? t.homeTeam : t.awayTeam}</h2>
+        <h2 className="row">{team && <TeamBadge team={team} size={36} />}{side === 'home' ? t.homeTeam : t.awayTeam}</h2>
         <select value={s.teamId} onChange={e => pickTeam(side, e.target.value)}>
           <option value="">{t.selectTeam}</option>
           {sortedTeams.map(tm => <option key={tm.id} value={tm.id}>{tm.name}</option>)}

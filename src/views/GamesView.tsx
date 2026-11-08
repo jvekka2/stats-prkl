@@ -9,6 +9,7 @@ import { periodLabel } from '../lib/clock';
 import { createGame, loadFormat, snapTeam } from '../lib/game';
 import { DEMO_TEAM_IDS } from '../lib/demo';
 import { rinkSvg } from '../lib/rink';
+import TeamBadge from '../components/TeamBadge';
 
 // Decorative shots for the hero illustration.
 const HERO_SHOTS: Shot[] = [
@@ -87,9 +88,11 @@ export default function GamesView() {
             <div key={g.id} className="list-item game-card" style={{ ['--home' as string]: g.home.color, ['--away' as string]: g.away.color }}>
               <button className="grow plain" onClick={() => go(live ? 'live' : 'results', g.id)}>
                 <div className="game-line">
+                  <TeamBadge team={g.home} size={30} />
                   <b>{g.home.name}</b>
                   <span className="score-mini">{s.home}–{s.away}</span>
                   <b>{g.away.name}</b>
+                  <TeamBadge team={g.away} size={30} />
                 </div>
                 <div className="muted small">
                   {formatDate(g.date, lang)} {g.venue && `· ${g.venue}`} · {t.shotsOnGoal.toLowerCase()} {sog.home}–{sog.away}

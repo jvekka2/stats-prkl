@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Player, Team } from '../types';
 import { deleteTeam, saveTeam, uid, useData } from '../lib/store';
 import { go } from '../lib/router';
 import { useT } from '../lib/i18n';
 import { parseRoster, sortPlayers } from '../lib/roster';
 import { ensurePlayers } from '../lib/demo';
+import { logoFromFile, logoFromUrl } from '../lib/logo';
+import TeamBadge from '../components/TeamBadge';
 
-export const TEAM_COLORS = ['#1d4ed8', '#dc2626', '#16a34a', '#f59e0b', '#7c3aed', '#0891b2', '#db2777', '#111827', '#ea580c', '#65a30d'];
+export const TEAM_COLORS = ['#f08015', '#000000', '#1d4ed8', '#dc2626', '#16a34a', '#f59e0b', '#7c3aed', '#0891b2', '#db2777', '#65a30d'];
 
 const abbreviate = (name: string) => {
   const words = name.trim().split(/\s+/).filter(Boolean);
@@ -23,6 +25,22 @@ export default function TeamEditView({ teamId }: { teamId?: string }) {
   );
   const [paste, setPaste] = useState('');
   const [showPaste, setShowPaste] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
+  const [logoMsg, setLogoMsg] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onLogoFile = async (f: File | undefined) => {
+    if (!f) return;
+    try { const logo = await logoFromFile(f); setTeam(tm => ({ ...tm, logo })); setLogoMsg(''); }
+    catch { setLogoMsg(t.logoFailed); }
+    if (fileRef.current) fileRef.current.value = '';
+  };
+  const onLogoUrl = async () => {
+    if (!logoUrl.trim()) return;
+    setLogoMsg('…');
+    try { const logo = await logoFromUrl(logoUrl.trim()); setTeam(tm => ({ ...tm, logo })); setLogoMsg(''); setLogoUrl(''); }
+    catch { setLogoMsg(t.logoUrlFailed); }
+  };
 
   const setPlayer = (id: string, patch: Partial<Player>) =>
     setTeam(tm => ({ ...tm, players: tm.players.map(p => (p.id === id ? { ...p, ...patch } : p)) }));
@@ -69,6 +87,25 @@ export default function TeamEditView({ teamId }: { teamId?: string }) {
           ))}
           <input type="color" value={team.color} onChange={e => setTeam({ ...team, color: e.target.value })} aria-label={t.color} />
         </div>
+      </div>
+
+      <div className="card">
+        <h2>{t.logo}</h2>
+        <div className="logo-edit">
+          <TeamBadge team={{ ...team, shortName: team.shortName || abbreviate(team.name) || '?' }} size={88} />
+          <div className="grow">
+            <div className="row wrap">
+              <button type="button" className="primary" onClick={() => fileRef.current?.click()}>⬆ {t.uploadLogo}</button>
+              {team.logo && <button type="button" className="danger" onClick={() => setTeam({ ...team, logo: undefined })}>{t.removeLogo}</button>}
+            </div>
+            <div className="row mt">
+              <input className="grow" type="url" placeholder={t.logoUrlPlaceholder} value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
+              <button type="button" onClick={onLogoUrl} disabled={!logoUrl.trim()}>{t.fetchLogo}</button>
+            </div>
+            <p className="muted small">{logoMsg || t.logoHint}</p>
+          </div>
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" hidden onChange={e => onLogoFile(e.target.files?.[0])} />
       </div>
 
       <div className="card">

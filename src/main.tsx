@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import { loadData } from './lib/store';
+import '@fontsource/bebas-neue/400.css';
+import '@fontsource/work-sans/400.css';
+import '@fontsource/work-sans/600.css';
+import '@fontsource/work-sans/700.css';
 import './styles.css';
 
 registerSW({ immediate: true });

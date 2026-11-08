@@ -42,11 +42,11 @@ const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / r
 
 // Full-bleed (maskable-safe) icon: blue field, puck in the middle, red dot as a "shot".
 const pixel = (x, y) => {
-  if (inEllipse(x, y, 0.72, 0.28, 0.08, 0.08)) return [225, 29, 72, 255];
+  if (inEllipse(x, y, 0.72, 0.28, 0.08, 0.08)) return [255, 255, 255, 255];
   if (inEllipse(x, y, 0.5, 0.47, 0.26, 0.1)) return [60, 60, 66, 255];
   if (x > 0.24 && x < 0.76 && y > 0.47 && y < 0.62) return [20, 20, 24, 255];
   if (inEllipse(x, y, 0.5, 0.62, 0.26, 0.1)) return [20, 20, 24, 255];
-  return [11, 61, 145, 255];
+  return [240, 128, 21, 255];
 };
 
 for (const size of [192, 512]) writeFileSync(`public/icon-${size}.png`, png(size, pixel));

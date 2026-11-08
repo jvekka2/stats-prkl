@@ -12,6 +12,8 @@
     "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
+    "@fontsource/bebas-neue": "^5.1.0",
+    "@fontsource/work-sans": "^5.1.0",
     "idb-keyval": "^6.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

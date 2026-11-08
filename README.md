@@ -6,7 +6,7 @@ Track every shot from the stands or the bench on your phone: tap the spot on the
 result, and get a box score, shot maps, heatmaps and per-player stats after the game. Share the results to
 WhatsApp as text or as an image card in one tap.
 
-Finnish 🇫🇮 and English 🇬🇧 · Works offline · No account needed · Data stays on your device
+Orange/black look with Bebas Neue + Work Sans · Finnish 🇫🇮 and English 🇬🇧 · Works offline · No account needed · Data stays on your device
 
 ## Features
 
@@ -15,6 +15,9 @@ Finnish 🇫🇮 and English 🇬🇧 · Works offline · No account needed · D
 - **Team library**: teams with colors and rosters (numbers, names, goalies). Paste a whole roster at once
   (`12 Matti Meikäläinen`, add `MV`/`G` for goalies). Pick the dressed players for each game.
   Players are optional: a team saved without players gets goalie #1 and skaters #2–#21 automatically.
+- **Team logos**: upload a logo per team (or paste an image URL if the site allows it). Logos are stored on the
+  device only, never in this repository. They show faintly in the background of each half of the rink while
+  tracking, and on the results page, lists and share image.
 - **Game format**: number of periods, period length, stop time or running time, optional overtime and shootout.
 - **Live tracking** (made for a phone in landscape):
   - Full rink with fixed sides: home attacks right, away attacks left
@@ -29,6 +32,8 @@ Finnish 🇫🇮 and English 🇬🇧 · Works offline · No account needed · D
   - Skater stats: G, A, P, SOG, attempts, blocked, missed, shooting %
   - Goalie stats: shots against, saves, goals against, SV%
   - Shootout attempts
+- **Shots table editor**: edit every shot in a table (period, time, team, shooter, result, assists, goalie),
+  delete shots or add shots without a rink location
 - **Sharing**: copy a WhatsApp-formatted summary, or share a 1080×1350 result card image
 - **Backup**: export/import all data as JSON (merge or replace)
 

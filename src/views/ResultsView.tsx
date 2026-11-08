@@ -9,6 +9,7 @@ import { periodLabel } from '../lib/clock';
 import { playerLabel } from '../lib/roster';
 import { copyText, formatDate, resultCard, shareImage, summaryText } from '../lib/share';
 import Rink, { Legend } from '../components/Rink';
+import TeamBadge from '../components/TeamBadge';
 
 export default function ResultsView({ gameId }: { gameId: string }) {
   const { games } = useData();
@@ -60,6 +61,7 @@ function Results({ game }: { game: Game }) {
     <>
       <div className="row between wrap">
         <button className="link" onClick={() => go('games')}>← {t.games}</button>
+        <button onClick={() => go('edit', game.id)}>✏️ {t.editShots}</button>
         {game.status !== 'final'
           ? <button className="primary" onClick={() => go('live', game.id)}>{t.resume} ▶</button>
           : <button onClick={() => { updateGame(game.id, g => ({ ...g, status: 'live' })); go('live', game.id); }}>{t.reopen}</button>}
@@ -68,9 +70,9 @@ function Results({ game }: { game: Game }) {
       <div className="card scorecard">
         <div className="muted small center">{formatDate(game.date, lang)}{game.venue && ` · ${game.venue}`} · {game.status === 'final' ? t.final : t.live}</div>
         <div className="score-row">
-          <div className="team-name" style={{ borderColor: game.home.color }}>{game.home.name}</div>
+          <div className="team-name" style={{ borderColor: game.home.color }}><TeamBadge team={game.home} size={56} /><span>{game.home.name}</span></div>
           <div className="final-score">{s.home}–{s.away}{s.shootoutWinner && <small> {t.so}</small>}</div>
-          <div className="team-name" style={{ borderColor: game.away.color }}>{game.away.name}</div>
+          <div className="team-name" style={{ borderColor: game.away.color }}><TeamBadge team={game.away} size={56} /><span>{game.away.name}</span></div>
         </div>
         <div className="table-wrap">
           <table className="period-table">
@@ -134,7 +136,8 @@ function Results({ game }: { game: Game }) {
             <button key={r} className={`chip r-${r}` + (results.includes(r) ? ' on' : '')} onClick={() => toggleResult(r)}>{labels[r]}</button>
           ))}
         </div>
-        <Rink shots={shots} colors={colors} mode={mode} labels={{ left: `◀ ${game.away.shortName}`, right: `${game.home.shortName} ▶` }} />
+        <Rink shots={shots} colors={colors} mode={mode} labels={{ left: `◀ ${game.away.shortName}`, right: `${game.home.shortName} ▶` }}
+          logos={{ home: game.home.logo, away: game.away.logo }} />
         <div className="row between wrap small">
           <Legend t={t} />
           <span className="muted">
@@ -165,7 +168,7 @@ function TeamTables({ game, side }: { game: Game; side: Side }) {
   const goalies = goalieLines(game, side);
   return (
     <div className="card" style={{ borderTop: `4px solid ${game[side].color}` }}>
-      <h2>{game[side].name}</h2>
+      <h2 className="row"><TeamBadge team={game[side]} size={32} /> {game[side].name}</h2>
       <div className="table-wrap">
         <table className="stats">
           <thead>

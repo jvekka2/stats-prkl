@@ -11,10 +11,13 @@ interface Props {
   highlightId?: string | null;
   overlay?: ReactNode;
   labels?: { left: string; right: string };
+  /** Team logos drawn faintly in the background: away on the left half, home on the right. */
+  logos?: { home?: string; away?: string };
 }
 
-export default function Rink({ shots, colors, mode = 'dots', onTap, onShotTap, highlightId, overlay, labels }: Props) {
+export default function Rink({ shots: allShots, colors, mode = 'dots', onTap, onShotTap, highlightId, overlay, labels, logos }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const shots = useMemo(() => allShots.filter(s => !s.noLocation), [allShots]);
   const heatUrl = useMemo(() => {
     if (mode !== 'heat') return null;
     const c = document.createElement('canvas');
@@ -45,6 +48,8 @@ export default function Rink({ shots, colors, mode = 'dots', onTap, onShotTap, h
           <clipPath id="rink-clip"><rect x="0" y="0" width={RINK_W} height={RINK_H} rx={CORNER_R} /></clipPath>
         </defs>
         <g clipPath="url(#rink-clip)" dangerouslySetInnerHTML={{ __html: RINK_MARKINGS }} />
+        {logos?.away && <image className="rink-logo" href={logos.away} x={50 - 21} y={42.5 - 21} width={42} height={42} preserveAspectRatio="xMidYMid meet" />}
+        {logos?.home && <image className="rink-logo" href={logos.home} x={150 - 21} y={42.5 - 21} width={42} height={42} preserveAspectRatio="xMidYMid meet" />}
         {labels && (
           <g className="rink-labels">
             <text x="50" y="80" textAnchor="middle">{labels.left}</text>

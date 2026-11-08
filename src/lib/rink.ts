@@ -75,11 +75,13 @@ export function shotMarker(s: Pick<Shot, 'x' | 'y' | 'result'>, color: string, s
 }
 
 /** Full standalone SVG (used for the share image). */
-export function rinkSvg(shots: Shot[], colors: { home: string; away: string }, scale = 1): string {
+export function rinkSvg(shots: Shot[], colors: { home: string; away: string }, scale = 1, logos?: { home?: string; away?: string }): string {
+  const logo = (href: string | undefined, cx: number) =>
+    href ? `<image href="${href}" x="${cx - 21}" y="21.5" width="42" height="42" opacity="0.16" preserveAspectRatio="xMidYMid meet"/>` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 ${RINK_W + 2} ${RINK_H + 2}">
     <defs><clipPath id="rc"><rect x="0" y="0" width="${RINK_W}" height="${RINK_H}" rx="${CORNER_R}"/></clipPath></defs>
-    <g clip-path="url(#rc)">${RINK_MARKINGS}</g>${BOARDS}
-    ${shots.map(s => shotMarker(s, colors[s.team], scale)).join('')}
+    <g clip-path="url(#rc)">${RINK_MARKINGS}</g>${logo(logos?.away, 50)}${logo(logos?.home, 150)}${BOARDS}
+    ${shots.filter(s => !s.noLocation).map(s => shotMarker(s, colors[s.team], scale)).join('')}
   </svg>`;
 }
 

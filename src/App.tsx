@@ -8,6 +8,7 @@ import NewGameView from './views/NewGameView';
 import LiveView from './views/LiveView';
 import ResultsView from './views/ResultsView';
 import SettingsView from './views/SettingsView';
+import ShotTableView from './views/ShotTableView';
 
 export default function App() {
   const route = useRoute();
@@ -20,12 +21,12 @@ export default function App() {
   if (route.name === 'live' && route.id) return <LiveView gameId={route.id} />;
 
   const tabs: [string, string][] = [['games', t.games], ['teams', t.teams], ['settings', t.settings]];
-  const activeTab = route.name === 'team' ? 'teams' : route.name === 'new' || route.name === 'results' ? 'games' : route.name;
+  const activeTab = route.name === 'team' ? 'teams' : route.name === 'new' || route.name === 'results' || route.name === 'edit' ? 'games' : route.name;
 
   return (
     <div className="app">
       <header className="topbar">
-        <span className="brand" onClick={() => go('games')}>🏒 {t.appName}</span>
+        <span className="brand" onClick={() => go('games')}>🏒 Stats <b>PRKL</b></span>
         <nav>
           {tabs.map(([name, label]) => (
             <button key={name} className={activeTab === name ? 'active' : ''} onClick={() => go(name)}>{label}</button>
@@ -37,8 +38,9 @@ export default function App() {
         {route.name === 'team' && <TeamEditView teamId={route.id} />}
         {route.name === 'new' && <NewGameView />}
         {route.name === 'results' && route.id && <ResultsView gameId={route.id} />}
+        {route.name === 'edit' && route.id && <ShotTableView gameId={route.id} />}
         {route.name === 'settings' && <SettingsView />}
-        {(route.name === 'games' || !['teams', 'team', 'new', 'results', 'settings'].includes(route.name)) && <GamesView />}
+        {(route.name === 'games' || !['teams', 'team', 'new', 'results', 'edit', 'settings'].includes(route.name)) && <GamesView />}
       </main>
     </div>
   );

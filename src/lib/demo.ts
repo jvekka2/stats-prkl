@@ -16,10 +16,21 @@ export function ensurePlayers(players: Player[], makeId: () => string, goalieLab
 
 type DemoTeam = Omit<Team, 'players' | 'updatedAt'> & { roster: string };
 
+/** Simple original shield crest for demo teams. */
+function crest(fill: string, accent: string, letter: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110">
+<path d="M50 4 L94 18 V54 C94 80 74 98 50 106 C26 98 6 80 6 54 V18 Z" fill="#111"/>
+<path d="M50 11 L87 23 V54 C87 76 70 91 50 98 C30 91 13 76 13 54 V23 Z" fill="${fill}"/>
+<path d="M13 60 L87 40 V50 L13 70 Z" fill="${accent}" opacity="0.9"/>
+<text x="50" y="74" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="54" fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke">${letter}</text>
+</svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
 // Fictional players for the built-in demo teams.
 const DEMO: DemoTeam[] = [
   {
-    id: 'demo-haukat', name: 'Haukat (demo)', shortName: 'HAU', color: '#1d4ed8',
+    id: 'demo-haukat', name: 'Haukat (demo)', shortName: 'HAU', color: '#1d4ed8', logo: crest('#1d4ed8', '#f08015', 'H'),
     roster: `1 Oskari Ovinen MV
 30 Veeti Vahti MV
 3 Aaro Aalto
@@ -39,7 +50,7 @@ const DEMO: DemoTeam[] = [
 27 Valtteri Vuori`
   },
   {
-    id: 'demo-sudet', name: 'Sudet (demo)', shortName: 'SUD', color: '#dc2626',
+    id: 'demo-sudet', name: 'Sudet (demo)', shortName: 'SUD', color: '#dc2626', logo: crest('#dc2626', '#111111', 'S'),
     roster: `33 Miro Maalinen MV
 35 Kasper Kassinen MV
 2 Arttu Alanen

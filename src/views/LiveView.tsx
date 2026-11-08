@@ -9,6 +9,7 @@ import { playerLabel } from '../lib/roster';
 import Rink from '../components/Rink';
 import ShotDialog, { type ShotDraft } from '../components/ShotDialog';
 import ShootoutPanel from '../components/ShootoutPanel';
+import TeamBadge from '../components/TeamBadge';
 
 function useTick(active: boolean) {
   const [, setN] = useState(0);
@@ -106,6 +107,7 @@ function Live({ game }: { game: Game }) {
 
   const teamBox = (side: Side) => (
     <div className={`team-box ${side}`} style={{ borderColor: game[side].color }}>
+      <TeamBadge team={game[side]} size={28} />
       <span className="abbr">{game[side].shortName}</span>
       <span className="big-score">{sc[side]}</span>
       <span className="sog">{t.colSog} {sog[side]}</span>
@@ -141,6 +143,7 @@ function Live({ game }: { game: Game }) {
             onShotTap={s => setDraft({ team: s.team, x: s.x, y: s.y, period: s.period, timeMs: s.timeMs, existing: s })}
             highlightId={lastId}
             labels={{ left: `◀ ${game.away.shortName}`, right: `${game.home.shortName} ▶` }}
+            logos={{ home: game.home.logo, away: game.away.logo }}
           />
           {periodOver && (
             <div className="period-over">
@@ -212,6 +215,7 @@ function LiveMenu({ game, onClose, upd, onNext, onEnd, onShootout }: {
             {game.status === 'live' && game.format.shootout && <button onClick={onShootout}>{t.toShootout}</button>}
             {game.status === 'shootout' && <button onClick={() => { upd(g => ({ ...g, status: 'live' })); onClose(); }}>◀ {t.back}</button>}
             <button onClick={() => go('results', game.id)}>📊 {t.results}</button>
+            <button onClick={() => go('edit', game.id)}>✏️ {t.editShots}</button>
             <button className="primary" onClick={onEnd}>{t.endGame}</button>
             <button onClick={() => go('games')}>← {t.games}</button>
           </div>

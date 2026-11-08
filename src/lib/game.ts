@@ -25,7 +25,7 @@ export const today = () => {
 export function snapTeam(team: Team, dressed?: Set<string>, goalieId?: string | null): GameTeam {
   const players = sortPlayers(dressed ? team.players.filter(p => dressed.has(p.id)) : team.players);
   const gid = goalieId && players.some(p => p.id === goalieId) ? goalieId : players.find(p => p.goalie)?.id ?? null;
-  return { teamId: team.id, name: team.name, shortName: team.shortName, color: team.color, players, goalieId: gid };
+  return { teamId: team.id, name: team.name, shortName: team.shortName, color: team.color, logo: team.logo, players, goalieId: gid };
 }
 
 export function createGame(id: string, home: GameTeam, away: GameTeam, format: GameFormat, date = today(), venue = ''): Game {

@@ -89,36 +89,52 @@ export async function resultCard(game: Game, t: Dict, lang: string): Promise<Blo
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
   const ctx = c.getContext('2d')!;
-  const font = (w: string) => (px: number) => `${w} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  const font = (w: string) => (px: number) => `${w} ${px}px "Work Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  const disp = () => (px: number) => `400 ${px}px "Bebas Neue", "Arial Narrow", sans-serif`;
+  await document.fonts?.ready;
   const s = finalScore(game);
   const rows = byPeriod(game);
 
   // Background
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#0d1424'); bg.addColorStop(1, '#162238');
+  bg.addColorStop(0, '#161616'); bg.addColorStop(1, '#000000');
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = game.home.color; ctx.fillRect(0, 0, W / 2, 14);
-  ctx.fillStyle = game.away.color; ctx.fillRect(W / 2, 0, W / 2, 14);
+  ctx.fillStyle = '#f08015'; ctx.fillRect(0, 0, W, 18);
+  ctx.fillStyle = game.home.color; ctx.fillRect(0, 18, W / 2, 8);
+  ctx.fillStyle = game.away.color; ctx.fillRect(W / 2, 18, W / 2, 8);
+  ctx.fillStyle = '#f08015'; ctx.fillRect(0, H - 8, W, 8);
 
-  ctx.fillStyle = '#9fb0cc'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#bdbdbd'; ctx.textAlign = 'center';
   ctx.font = font('500')(30);
   ctx.fillText(`${formatDate(game.date, lang)}${game.venue ? ' · ' + game.venue : ''}`, W / 2, 80);
 
   // Team names
   ctx.fillStyle = '#fff';
   for (const [side, x] of [['home', W * 0.25], ['away', W * 0.75]] as [Side, number][]) {
-    fitText(ctx, game[side].name, W / 2 - P, font('700'), 46);
-    ctx.fillText(game[side].name, x, 160);
+    fitText(ctx, game[side].name.toUpperCase(), W / 2 - P, disp(), 64);
+    ctx.fillText(game[side].name.toUpperCase(), x, 165);
+  }
+  // Logos beside the score
+  for (const [side, cx] of [['home', 140], ['away', W - 140]] as [Side, number][]) {
+    const src = game[side].logo;
+    if (!src) continue;
+    try {
+      const img = await loadImage(src);
+      const k = Math.min(150 / img.naturalWidth, 150 / img.naturalHeight) || 1;
+      const w = img.naturalWidth * k, h = img.naturalHeight * k;
+      ctx.drawImage(img, cx - w / 2, 270 - h / 2, w, h);
+    } catch { /* ignore broken logo */ }
   }
   // Score
-  ctx.font = font('800')(180);
-  ctx.fillText(`${s.home} – ${s.away}`, W / 2, 340);
+  ctx.fillStyle = '#fff';
+  ctx.font = disp()(230);
+  ctx.fillText(`${s.home} – ${s.away}`, W / 2, 345);
   const suf = suffix(game, t).trim();
-  if (suf) { ctx.font = font('600')(36); ctx.fillStyle = '#9fb0cc'; ctx.fillText(suf, W / 2, 390); }
+  if (suf) { ctx.font = disp()(44); ctx.fillStyle = '#f08015'; ctx.fillText(suf, W / 2, 395); }
 
   // Shots by period table
   let y = 450;
-  ctx.font = font('600')(30); ctx.fillStyle = '#9fb0cc';
+  ctx.font = disp()(40); ctx.fillStyle = '#f08015';
   const cols = rows.length + 1;
   const colW = (W - 2 * P - 260) / cols;
   ctx.textAlign = 'left'; ctx.fillText(t.shotsOnGoal, P, y);
@@ -142,7 +158,7 @@ export async function resultCard(game: Game, t: Dict, lang: string): Promise<Blo
   // Rink with shot markers
   y += 40;
   const rinkW = W - 2 * P, rinkH = rinkW * 87 / 202;
-  const svg = rinkSvg(game.shots, { home: game.home.color, away: game.away.color }, 1.15);
+  const svg = rinkSvg(game.shots, { home: game.home.color, away: game.away.color }, 1.15, { home: game.home.logo, away: game.away.logo });
   try {
     const img = await loadImage('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
     ctx.drawImage(img, P, y, rinkW, rinkH);
@@ -152,9 +168,9 @@ export async function resultCard(game: Game, t: Dict, lang: string): Promise<Blo
   // Goals
   const goals = game.shots.filter(x => x.result === 'goal').sort((a, b) => a.period - b.period || a.timeMs - b.timeMs);
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#9fb0cc'; ctx.font = font('600')(28);
-  ctx.fillText(`🚨 ${t.goalScorers}`, P, y);
-  ctx.fillText(`🧤 ${t.goaliesShort}`, W / 2 + 20, y);
+  ctx.fillStyle = '#f08015'; ctx.font = disp()(38);
+  ctx.fillText(t.goalScorers.toUpperCase(), P, y);
+  ctx.fillText(t.goaliesShort.toUpperCase(), W / 2 + 20, y);
   ctx.font = font('500')(26); ctx.fillStyle = '#fff';
   let gy = y + 40;
   const maxGoals = Math.floor((H - 70 - gy) / 34);
@@ -177,7 +193,7 @@ export async function resultCard(game: Game, t: Dict, lang: string): Promise<Blo
     }
   }
 
-  ctx.textAlign = 'center'; ctx.fillStyle = '#5f7090'; ctx.font = font('500')(24);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#8a8a8a'; ctx.font = font('500')(24);
   ctx.fillText(`🏒 ${t.trackedWith}`, W / 2, H - 30);
 
   return new Promise((res, rej) => c.toBlob(b => (b ? res(b) : rej(new Error('toBlob failed'))), 'image/png'));

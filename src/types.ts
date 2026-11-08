@@ -15,6 +15,8 @@ export interface Team {
   name: string;
   shortName: string;
   color: string;
+  /** Logo as a data: URL (stored on this device only). */
+  logo?: string;
   players: Player[];
   updatedAt: number;
 }
@@ -25,6 +27,7 @@ export interface GameTeam {
   name: string;
   shortName: string;
   color: string;
+  logo?: string;
   players: Player[]; // dressed players
   goalieId: string | null; // goalie in net (null = empty net)
 }
@@ -48,6 +51,8 @@ export interface Shot {
   /** Rink coordinates in feet: x 0..200 (left→right), y 0..85 (top→bottom). Home attacks right. */
   x: number;
   y: number;
+  /** True for shots added from the table without a rink location (not drawn on maps). */
+  noLocation?: boolean;
   period: number; // 1..periods, periods+1 = OT
   timeMs: number; // elapsed time in period
   assists: string[];
