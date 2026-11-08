@@ -4,6 +4,7 @@ import { updateGame, uid, useData } from '../lib/store';
 import { go } from '../lib/router';
 import { useT } from '../lib/i18n';
 import * as C from '../lib/clock';
+import { enterFullscreen, exitFullscreen, fullscreenSupported, toggleFullscreen, useFullscreen } from '../lib/fullscreen';
 import { isOnGoal, other, score } from '../lib/stats';
 import { playerLabel } from '../lib/roster';
 import Rink from '../components/Rink';
@@ -66,7 +67,15 @@ function Live({ game }: { game: Game }) {
     if (running && periodOver) upd(g => ({ ...g, clock: C.stop(g.clock, g.format) }));
   });
 
-  const toggleClock = () => upd(g => ({ ...g, clock: g.clock.runningSince != null ? C.stop(g.clock, g.format) : C.start(g.clock) }));
+  const isFs = useFullscreen();
+  // Leave fullscreen when the tracking screen closes.
+  useEffect(() => () => { exitFullscreen(); }, []);
+
+  const toggleClock = () => {
+    // Starting the clock is a user tap, so the browser lets us go fullscreen + landscape (Android).
+    if (!running) enterFullscreen();
+    upd(g => ({ ...g, clock: g.clock.runningSince != null ? C.stop(g.clock, g.format) : C.start(g.clock) }));
+  };
 
   const onTap = (x: number, y: number) => {
     // Fixed sides: home attacks right, so a tap on the right half is a home shot.
@@ -130,6 +139,11 @@ function Live({ game }: { game: Game }) {
         )}
         {teamBox('home')}
         <button className="icon" onClick={undo} disabled={!game.shots.length || game.status !== 'live'} aria-label={t.undo}>↶</button>
+        {fullscreenSupported() && (
+          <button className="icon" onClick={toggleFullscreen} aria-label={isFs ? t.exitFullscreen : t.fullscreen} title={isFs ? t.exitFullscreen : t.fullscreen}>
+            {isFs ? '🗗' : '⛶'}
+          </button>
+        )}
       </div>
 
       {game.status === 'shootout' ? (

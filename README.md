@@ -25,7 +25,7 @@ Orange/black look with Bebas Neue + Work Sans · Finnish 🇫🇮 and English �
   - Game clock with start/stop, auto-stop at 0:00, adjustable time; every shot is stamped with period and time
   - Tap a shot marker to edit or delete it, undo the last shot
   - Goalie in net per team (selected at start, changeable from the menu, empty net supported)
-  - Screen stays awake while tracking
+  - Screen stays awake while tracking; on Android, starting the clock switches to full screen and locks landscape (⛶ button to toggle)
 - **Results**
   - Score, goals and shots by period, shot attempts
   - Shot map (dots) and **heatmap**, filterable by team, period, player and result
