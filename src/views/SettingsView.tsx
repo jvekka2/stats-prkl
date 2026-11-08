@@ -58,7 +58,7 @@ export default function SettingsView() {
         <p className="muted small">{t.demoTeamsInfo}</p>
         <button onClick={() => { addDemoTeams(); setMsg(t.demoTeamsAdded); }}>👕 {t.addDemoTeams}</button>
       </div>
-      <p className="muted small center">Stats PRKL v{__APP_VERSION__}</p>
+      <p className="muted small center"><a href="#/about">Stats PRKL v{__APP_VERSION__}</a></p>
     </>
   );
 }

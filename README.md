@@ -37,6 +37,16 @@ Orange/black look with Bebas Neue + Work Sans · Finnish 🇫🇮 and English �
 - **Sharing**: copy a WhatsApp-formatted summary, or share a 1080×1350 result card image
 - **Backup**: export/import all data as JSON (merge or replace)
 
+## Install on your phone (recommended)
+
+Installed from the home screen the app runs full screen (no address bar), works offline and stays in landscape
+while tracking. The app also shows these steps on the start page and under **About**.
+
+- **Android (Chrome):** open the site → ⋮ menu → **Install app** (or **Add to Home screen**)
+- **Samsung Internet:** ☰ menu → **Add page to** → **Home screen**
+- **iPhone / iPad:** open in **Safari** → **Share** → **Add to Home Screen** → **Add**
+- **Computer (Chrome/Edge):** click the install icon at the right end of the address bar
+
 ## Stat definitions
 
 | Stat | Meaning |

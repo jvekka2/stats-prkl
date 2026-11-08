@@ -124,7 +124,7 @@ function Live({ game }: { game: Game }) {
   );
 
   return (
-    <div className="live">
+    <div className="live-screen">
       <div className="live-bar">
         <button className="icon" onClick={() => setMenu(true)} aria-label={t.menu}>☰</button>
         {teamBox('away')}

@@ -1,7 +1,7 @@
 {
   "name": "stats-prkl",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "Shot tracker for junior and youth hockey games",
   "scripts": {

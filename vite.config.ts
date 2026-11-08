@@ -6,7 +6,7 @@ import pkg from './package.json';
 // Served from https://<user>.github.io/stats-prkl/
 export default defineConfig({
   base: '/stats-prkl/',
-  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
+  define: { __APP_VERSION__: JSON.stringify(pkg.version), __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
   plugins: [
     react(),
     VitePWA({

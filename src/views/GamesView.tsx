@@ -10,6 +10,7 @@ import { createGame, loadFormat, snapTeam } from '../lib/game';
 import { DEMO_TEAM_IDS } from '../lib/demo';
 import { rinkSvg } from '../lib/rink';
 import TeamBadge from '../components/TeamBadge';
+import InstallGuide from '../components/InstallGuide';
 
 // Decorative shots for the hero illustration.
 const HERO_SHOTS: Shot[] = [
@@ -64,6 +65,8 @@ export default function GamesView() {
         </div>
         <div className="hero-rink" dangerouslySetInnerHTML={{ __html: heroRink }} />
       </section>
+
+      <InstallGuide compact />
 
       <h2 className="section-title">{t.howItWorks}</h2>
       <div className="steps">
