@@ -133,7 +133,26 @@ const en = {
   confirmReplace: 'Replace ALL data on this device?',
   storageNote: 'Data is stored only on this device. Export a backup regularly.',
   reopen: 'Reopen for editing',
-  trackedWith: 'Tracked with Stats PRKL'
+  trackedWith: 'Tracked with Stats PRKL',
+  playersOptional: 'Players are optional. If you leave the roster empty, goalie #1 and skaters #2–#21 are created automatically, and you can rename them later.',
+  heroTitle: 'Shot stats for every junior game',
+  heroText: 'Tap the rink where the shot came from, pick the player and the result. After the game you get a heatmap, player stats and a summary ready for WhatsApp.',
+  tryDemo: 'Try a demo game',
+  howItWorks: 'How it works',
+  step1Title: 'Teams',
+  step1Text: 'Add both teams. Players are optional, numbers are enough.',
+  step2Title: 'Start a game',
+  step2Text: 'Pick the teams, period length and how the clock runs.',
+  step3Title: 'Tap the shots',
+  step3Text: 'Tap the rink → player → goal, save, blocked or missed.',
+  step4Title: 'Share results',
+  step4Text: 'Heatmap, player stats and a WhatsApp summary.',
+  demoReady: 'Demo teams ready',
+  teamsReady: 'teams ready',
+  recentGames: 'Recent games',
+  addDemoTeams: 'Add demo teams',
+  demoTeamsAdded: 'Demo teams added.',
+  demoTeamsInfo: 'Two demo teams with players and goalies, handy for trying the app.'
 };
 
 export type Dict = typeof en;
@@ -269,7 +288,26 @@ const fi: Dict = {
   confirmReplace: 'Korvataanko KAIKKI tämän laitteen tiedot?',
   storageNote: 'Tiedot tallentuvat vain tähän laitteeseen. Ota varmuuskopio säännöllisesti.',
   reopen: 'Avaa muokattavaksi',
-  trackedWith: 'Tilastoitu Stats PRKL:llä'
+  trackedWith: 'Tilastoitu Stats PRKL:llä',
+  playersOptional: 'Pelaajien lisääminen on vapaaehtoista. Jos jätät kokoonpanon tyhjäksi, luodaan automaattisesti maalivahti #1 ja kenttäpelaajat #2–#21. Voit nimetä ne myöhemmin.',
+  heroTitle: 'Laukaustilastot jokaisesta junioripelistä',
+  heroText: 'Napauta kenttää kohdasta, josta laukaus lähti, valitse pelaaja ja tulos. Pelin jälkeen saat lämpökartan, pelaajatilastot ja yhteenvedon valmiina WhatsAppiin.',
+  tryDemo: 'Kokeile demo-ottelua',
+  howItWorks: 'Näin se toimii',
+  step1Title: 'Joukkueet',
+  step1Text: 'Lisää molemmat joukkueet. Pelaajat ovat vapaaehtoisia, numerot riittävät.',
+  step2Title: 'Aloita ottelu',
+  step2Text: 'Valitse joukkueet, erän pituus ja kellon tyyppi.',
+  step3Title: 'Napauta laukaukset',
+  step3Text: 'Napauta kenttää → pelaaja → maali, torjunta, blokattu tai ohi.',
+  step4Title: 'Jaa tulokset',
+  step4Text: 'Lämpökartta, pelaajatilastot ja WhatsApp-yhteenveto.',
+  demoReady: 'Demojoukkueet valmiina',
+  teamsReady: 'joukkuetta valmiina',
+  recentGames: 'Viimeisimmät ottelut',
+  addDemoTeams: 'Lisää demojoukkueet',
+  demoTeamsAdded: 'Demojoukkueet lisätty.',
+  demoTeamsInfo: 'Kaksi demojoukkuetta pelaajineen ja maalivahteineen sovelluksen kokeilua varten.'
 };
 
 const dicts: Record<Lang, Dict> = { fi, en };

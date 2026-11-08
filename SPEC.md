@@ -8,7 +8,8 @@ One person tracks a game on a phone in landscape. Works offline at the rink.
 | Topic | Decision |
 |---|---|
 | Teams tracked | Both teams, full rosters (numbers, names, goalies) |
-| Rosters | Team library, reused across games; easy to edit players before each game (dressed lineup) |
+| Demo | Two built-in demo teams (players + goalies) seeded on first launch; one-tap demo game from the start page |
+| Rosters | Players optional (empty roster → goalie #1 + skaters #2–#21); team library, reused across games; easy to edit players before each game (dressed lineup) |
 | Clock | In-app game clock; tracker taps Start/Stop (stop time) or lets it run (running time); clock is editable; every shot is stamped with period + game time |
 | Game setup | Periods, period length (min), clock mode (stop / running), optional OT (length), optional shootout |
 | Goalies | Starting goalie chosen per team at game start; every shot against is charged to that goalie (rare goalie change possible from a menu, incl. empty net) |
@@ -32,6 +33,8 @@ One person tracks a game on a phone in landscape. Works offline at the rink.
 - Blocked shot location = where the shot was taken
 
 ## Game flow
+
+0. **Start page**: colorful hero with a one-tap demo game, and a 4-step guide (teams → start game → tap shots → share) that ticks off as you go.
 
 1. **Setup**: pick home & away team, dressed players, starting goalies, game format.
 2. **Live**: clock + score + shots bar on top, rink fills the screen. Tap → popup → saved.

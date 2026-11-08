@@ -130,3 +130,24 @@ describe('roster parsing', () => {
     expect(shortName(ps[0])).toBe('#12 M. Meikäläinen');
   });
 });
+
+describe('demo teams and placeholder rosters', async () => {
+  const { demoTeams, ensurePlayers, placeholderPlayers } = await import('./demo');
+  it('builds two demo teams with skaters and two goalies each', () => {
+    const teams = demoTeams(txt => parseRoster(txt, id));
+    expect(teams).toHaveLength(2);
+    for (const tm of teams) {
+      expect(tm.players.filter(p => p.goalie)).toHaveLength(2);
+      expect(tm.players.filter(p => !p.goalie).length).toBeGreaterThanOrEqual(15);
+      expect(new Set(tm.players.map(p => p.number)).size).toBe(tm.players.length);
+    }
+  });
+  it('fills an empty roster with goalie #1 and skaters #2-#21', () => {
+    const ps = placeholderPlayers(id, 'MV');
+    expect(ps).toHaveLength(21);
+    expect(ps[0]).toMatchObject({ number: '1', goalie: true });
+    expect(ps.filter(p => !p.goalie).map(p => p.number)).toEqual(Array.from({ length: 20 }, (_, i) => String(i + 2)));
+    const existing = [{ id: 'x', number: '9', name: 'X', goalie: false }];
+    expect(ensurePlayers(existing, id)).toBe(existing);
+  });
+});

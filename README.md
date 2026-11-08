@@ -10,8 +10,11 @@ Finnish 🇫🇮 and English 🇬🇧 · Works offline · No account needed · D
 
 ## Features
 
+- **Demo teams built in**: two fictional demo teams with players and goalies are created on first launch,
+  and "Try a demo game" on the start page starts tracking right away. Re-add them from Settings.
 - **Team library**: teams with colors and rosters (numbers, names, goalies). Paste a whole roster at once
   (`12 Matti Meikäläinen`, add `MV`/`G` for goalies). Pick the dressed players for each game.
+  Players are optional: a team saved without players gets goalie #1 and skaters #2–#21 automatically.
 - **Game format**: number of periods, period length, stop time or running time, optional overtime and shootout.
 - **Live tracking** (made for a phone in landscape):
   - Full rink with fixed sides: home attacks right, away attacks left

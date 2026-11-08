@@ -4,6 +4,7 @@ import { deleteTeam, saveTeam, uid, useData } from '../lib/store';
 import { go } from '../lib/router';
 import { useT } from '../lib/i18n';
 import { parseRoster, sortPlayers } from '../lib/roster';
+import { ensurePlayers } from '../lib/demo';
 
 export const TEAM_COLORS = ['#1d4ed8', '#dc2626', '#16a34a', '#f59e0b', '#7c3aed', '#0891b2', '#db2777', '#111827', '#ea580c', '#65a30d'];
 
@@ -42,7 +43,8 @@ export default function TeamEditView({ teamId }: { teamId?: string }) {
       ...team,
       name: team.name.trim(),
       shortName: (team.shortName.trim() || abbreviate(team.name)).toUpperCase(),
-      players: sortPlayers(team.players.filter(p => p.number.trim() || p.name.trim()))
+      // Players are optional: an empty roster becomes goalie #1 + skaters #2–#21.
+      players: sortPlayers(ensurePlayers(team.players.filter(p => p.number.trim() || p.name.trim()), uid, t.goalie))
     });
     go('teams');
   };
@@ -74,6 +76,7 @@ export default function TeamEditView({ teamId }: { teamId?: string }) {
           <h2>{t.players} ({team.players.length})</h2>
           <button type="button" onClick={() => setShowPaste(s => !s)}>{t.pasteRoster}</button>
         </div>
+        {team.players.length === 0 && <p className="hint-box">💡 {t.playersOptional}</p>}
         {showPaste && (
           <div className="paste">
             <p className="muted small">{t.pasteHint}</p>

@@ -1,6 +1,8 @@
 import { useSyncExternalStore } from 'react';
 import { get, set } from 'idb-keyval';
 import type { AppData, Game, Team } from '../types';
+import { demoTeams } from './demo';
+import { parseRoster } from './roster';
 
 const KEY = 'stats-prkl:data:v1';
 
@@ -43,6 +45,11 @@ export async function loadData() {
   try {
     const stored = await get<AppData>(KEY);
     if (stored && stored.version === 1) data = stored;
+    else {
+      // First launch: start with two demo teams so the app can be tried right away.
+      data = { ...data, teams: demoTeams(txt => parseRoster(txt, uid)) };
+      persist();
+    }
   } catch (err) {
     console.error('Load failed', err);
   }
@@ -76,6 +83,12 @@ export function saveTeam(team: Team) {
 
 export function deleteTeam(id: string) {
   update(d => ({ ...d, teams: d.teams.filter(t => t.id !== id) }));
+}
+
+/** (Re)add the demo teams; existing demo teams are reset to their original roster. */
+export function addDemoTeams() {
+  const demos = demoTeams(txt => parseRoster(txt, uid));
+  update(d => ({ ...d, teams: [...d.teams.filter(t => !demos.some(x => x.id === t.id)), ...demos] }));
 }
 
 // ----- Games -----

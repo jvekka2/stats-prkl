@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { exportJson, importJson } from '../lib/store';
+import { addDemoTeams, exportJson, importJson } from '../lib/store';
 import { setLang, useLang, useT } from '../lib/i18n';
 import { downloadBlob } from '../lib/share';
 
@@ -52,6 +52,11 @@ export default function SettingsView() {
         </div>
         <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={e => onFile(e.target.files?.[0])} />
         {msg && <p>{msg}</p>}
+      </div>
+      <div className="card">
+        <h2>{t.addDemoTeams}</h2>
+        <p className="muted small">{t.demoTeamsInfo}</p>
+        <button onClick={() => { addDemoTeams(); setMsg(t.demoTeamsAdded); }}>👕 {t.addDemoTeams}</button>
       </div>
       <p className="muted small center">Stats PRKL v{__APP_VERSION__}</p>
     </>

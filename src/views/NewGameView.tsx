@@ -1,20 +1,11 @@
 import { useState } from 'react';
-import type { Game, GameFormat, GameTeam, Side, Team } from '../types';
-import { saveGame, uid, useData } from '../lib/store';
+import type { GameFormat, Side, Team } from '../types';
+import { saveGame, saveTeam, uid, useData } from '../lib/store';
 import { go } from '../lib/router';
 import { useT } from '../lib/i18n';
 import { playerLabel, sortPlayers } from '../lib/roster';
-
-const FORMAT_KEY = 'stats-prkl:lastFormat';
-const DEFAULT_FORMAT: GameFormat = { periods: 3, periodMinutes: 15, clockMode: 'stop', overtime: false, overtimeMinutes: 5, shootout: false };
-
-function loadFormat(): GameFormat {
-  try {
-    const v = localStorage.getItem(FORMAT_KEY);
-    if (v) return { ...DEFAULT_FORMAT, ...JSON.parse(v) };
-  } catch { /* ignore */ }
-  return DEFAULT_FORMAT;
-}
+import { createGame, loadFormat, rememberFormat, snapTeam, today } from '../lib/game';
+import { placeholderPlayers } from '../lib/demo';
 
 interface SideSetup { teamId: string; dressed: Set<string>; goalieId: string | null }
 
@@ -23,11 +14,6 @@ const setupFor = (team: Team | undefined): SideSetup => ({
   dressed: new Set(team?.players.map(p => p.id) ?? []),
   goalieId: team?.players.find(p => p.goalie)?.id ?? null
 });
-
-const today = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
 
 export default function NewGameView() {
   const { teams } = useData();
@@ -41,7 +27,15 @@ export default function NewGameView() {
   const teamById = (id: string) => teams.find(x => x.id === id);
   const sortedTeams = [...teams].sort((a, b) => a.name.localeCompare(b.name));
 
-  const pickTeam = (side: Side, id: string) => setSides(s => ({ ...s, [side]: setupFor(teamById(id)) }));
+  const pickTeam = (side: Side, id: string) => {
+    let team = teamById(id);
+    // Players are optional: a team without a roster gets numbered placeholder players.
+    if (team && team.players.length === 0) {
+      team = { ...team, players: placeholderPlayers(uid, t.goalie) };
+      saveTeam(team);
+    }
+    setSides(s => ({ ...s, [side]: setupFor(team) }));
+  };
   const toggle = (side: Side, pid: string) => setSides(s => {
     const dressed = new Set(s[side].dressed);
     if (dressed.has(pid)) dressed.delete(pid); else dressed.add(pid);
@@ -53,20 +47,8 @@ export default function NewGameView() {
   function start() {
     const h = teamById(sides.home.teamId), a = teamById(sides.away.teamId);
     if (!h || !a || h.id === a.id) { setError(t.needTwoTeams); return; }
-    const snap = (team: Team, s: SideSetup): GameTeam => {
-      const players = sortPlayers(team.players.filter(p => s.dressed.has(p.id)));
-      const goalieId = s.goalieId && players.some(p => p.id === s.goalieId) ? s.goalieId : players.find(p => p.goalie)?.id ?? null;
-      return { teamId: team.id, name: team.name, shortName: team.shortName, color: team.color, players, goalieId };
-    };
-    const game: Game = {
-      id: uid(), date, venue: venue.trim(),
-      home: snap(h, sides.home), away: snap(a, sides.away),
-      format,
-      clock: { period: 1, elapsedMs: 0, runningSince: null },
-      shots: [], shootout: [], status: 'live',
-      createdAt: Date.now(), updatedAt: Date.now()
-    };
-    try { localStorage.setItem(FORMAT_KEY, JSON.stringify(format)); } catch { /* ignore */ }
+    const game = createGame(uid(), snapTeam(h, sides.home.dressed, sides.home.goalieId), snapTeam(a, sides.away.dressed, sides.away.goalieId), format, date, venue.trim());
+    rememberFormat(format);
     saveGame(game);
     go('live', game.id);
   }
